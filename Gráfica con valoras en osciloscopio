@@ -1,0 +1,27 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+v_prog = np.array([0, 0.5, 1, 1.5, 2, 2.5, 3, 3.3])
+v_dac_osc = np.array([0.0275, 0.581, 0.952, 1.43, 1.90, 2.36, 2.83, 3.11])
+v_pwm_osc = np.array([-0.0632, 0.445, 0.924, 1.43, 1.92, 2.41, 2.92, 3.22])
+
+fig, ax = plt.subplots(figsize=(7, 6))
+ax.plot(v_prog, v_prog, 'k--', linewidth=1, label='Ideal (V medido = V programado)')
+ax.plot(v_prog, v_dac_osc, 'o-', color='#1f77b4', linewidth=2, markersize=7, label='DAC (Nodo D) — Osciloscopio')
+ax.plot(v_prog, v_pwm_osc, 's-', color='#d62728', linewidth=2, markersize=7, label='PWM filtrado — Osciloscopio')
+
+for x, y in zip(v_prog, v_dac_osc):
+    ax.annotate(f'{y:.3f}', (x, y), textcoords="offset points", xytext=(-5, 8), fontsize=8, color='#1f77b4', ha='right')
+for x, y in zip(v_prog, v_pwm_osc):
+    ax.annotate(f'{y:.3f}', (x, y), textcoords="offset points", xytext=(5, -12), fontsize=8, color='#d62728', ha='left')
+
+ax.set_xlabel('V programado (V)', fontsize=12)
+ax.set_ylabel('V medido (V)', fontsize=12)
+ax.set_title('Curva de calibración: V medido vs. V programado\nDAC vs. PWM filtrado (ESP32) — Osciloscopio', fontsize=13)
+ax.set_xlim(-0.15, 3.5)
+ax.set_ylim(-0.15, 3.5)
+ax.grid(True, linestyle=':', alpha=0.6)
+ax.legend(fontsize=10, loc='upper left')
+ax.set_aspect('equal', adjustable='box')
+plt.tight_layout()
+plt.show()
